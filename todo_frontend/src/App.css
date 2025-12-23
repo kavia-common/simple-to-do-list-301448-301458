@@ -42,6 +42,135 @@
   --shadow-lg: rgba(0, 0, 0, 0.5);
 }
 
+/* ===== ANIMATION KEYFRAMES ===== */
+
+/* Fade-in and slide-up for todo items entering */
+@keyframes fadeInSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Fade-out and slide-down for todo items exiting */
+@keyframes fadeOutSlideDown {
+  from {
+    opacity: 1;
+    transform: translateY(0);
+    max-height: 500px;
+  }
+  to {
+    opacity: 0;
+    transform: translateY(10px);
+    max-height: 0;
+  }
+}
+
+/* Shake animation for validation errors */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+/* Pulse animation for success feedback */
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* Spinner rotation for loading state */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Strike-through animation for completed todos */
+@keyframes strikeThrough {
+  from {
+    text-decoration-color: transparent;
+  }
+  to {
+    text-decoration-color: currentColor;
+  }
+}
+
+/* Slide up and fade for toast notifications */
+@keyframes slideUpFade {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== ANIMATION UTILITY CLASSES ===== */
+
+.fade-in-slide-up {
+  animation: fadeInSlideUp 0.3s ease-out forwards;
+}
+
+.fade-out-slide-down {
+  animation: fadeOutSlideDown 0.2s ease-in forwards;
+}
+
+.shake-animation {
+  animation: shake 0.4s ease-in-out;
+}
+
+.pulse-animation {
+  animation: pulse 0.3s ease-in-out;
+}
+
+/* Loading spinner inline */
+.spinner {
+  display: inline-block;
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  margin-right: 0.5rem;
+  vertical-align: middle;
+}
+
+/* ===== REDUCED MOTION SUPPORT ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .theme-toggle:hover {
+    transform: none;
+  }
+
+  .btn:hover {
+    transform: none;
+  }
+
+  .todo-item:hover {
+    transform: none;
+  }
+
+  .todo-input-form:hover {
+    transform: none;
+  }
+}
+
+/* ===== BASE STYLES ===== */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -53,14 +182,13 @@ body {
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 .App {
   background-color: var(--background);
   min-height: 100vh;
   color: var(--text);
-  transition: background-color 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* Header Styles */
@@ -86,7 +214,7 @@ body {
   font-weight: 500;
 }
 
-/* Theme Toggle Button */
+/* Theme Toggle Button with animation */
 .theme-toggle {
   position: absolute;
   top: 1rem;
@@ -111,6 +239,19 @@ body {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
+.theme-toggle:active {
+  transform: rotate(20deg) scale(1.05);
+}
+
+.theme-toggle:focus {
+  outline: 3px solid rgba(255, 255, 255, 0.5);
+  outline-offset: 2px;
+}
+
+.theme-toggle.transitioning {
+  animation: spin 0.5s ease-in-out;
+}
+
 /* Main Content */
 .app-main {
   padding: 2rem 1rem;
@@ -129,12 +270,16 @@ body {
   box-shadow: 0 4px 12px var(--shadow);
   margin-bottom: 2rem;
   border: 1px solid var(--border);
-  transition: all 0.3s ease;
+  transition: all 0.2s ease-out;
 }
 
 .todo-input-form:hover {
   box-shadow: 0 6px 16px var(--shadow-lg);
   transform: translateY(-2px);
+}
+
+.todo-input-form.error {
+  animation: shake 0.4s ease-in-out;
 }
 
 .input-row {
@@ -149,7 +294,7 @@ body {
   border: 2px solid var(--border);
   border-radius: 10px;
   font-size: 1rem;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease-out;
   background: var(--background);
   color: var(--text);
 }
@@ -158,6 +303,12 @@ body {
   outline: none;
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--primary-light);
+  transform: translateY(-1px);
+}
+
+.todo-input.error {
+  border-color: var(--error);
+  animation: shake 0.4s ease-in-out;
 }
 
 .todo-description-input {
@@ -168,7 +319,7 @@ body {
   font-size: 0.95rem;
   font-family: inherit;
   resize: vertical;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease-out;
   background: var(--background);
   color: var(--text);
 }
@@ -183,6 +334,7 @@ body {
   display: flex;
   gap: 0.75rem;
   align-items: flex-start;
+  animation: fadeInSlideUp 0.2s ease-out;
 }
 
 .btn-show-desc {
@@ -193,15 +345,16 @@ body {
   font-size: 0.9rem;
   padding: 0.5rem 0;
   text-align: left;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease-out;
 }
 
 .btn-show-desc:hover {
   color: var(--primary-hover);
   text-decoration: underline;
+  transform: translateX(3px);
 }
 
-/* Button Styles */
+/* Button Styles with micro-interactions */
 .btn {
   padding: 0.875rem 1.5rem;
   border: none;
@@ -209,24 +362,37 @@ body {
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease-out;
   white-space: nowrap;
   box-shadow: 0 2px 4px var(--shadow);
+  position: relative;
+  overflow: hidden;
 }
 
-.btn:hover {
+.btn:hover:not(:disabled) {
   transform: translateY(-2px);
   box-shadow: 0 4px 8px var(--shadow-lg);
 }
 
-.btn:active {
-  transform: translateY(0);
+.btn:active:not(:disabled) {
+  transform: translateY(0) scale(0.98);
+  transition-duration: 0.1s;
+}
+
+.btn:focus {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 2px;
 }
 
 .btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
   transform: none !important;
+}
+
+.btn.loading {
+  pointer-events: none;
+  opacity: 0.8;
 }
 
 .btn-add {
@@ -245,7 +411,7 @@ body {
   font-size: 0.9rem;
 }
 
-.btn-save:hover {
+.btn-save:hover:not(:disabled) {
   background-color: var(--success-hover);
 }
 
@@ -257,8 +423,8 @@ body {
   font-size: 0.9rem;
 }
 
-.btn-cancel:hover,
-.btn-hide-desc:hover {
+.btn-cancel:hover:not(:disabled),
+.btn-hide-desc:hover:not(:disabled) {
   background-color: var(--secondary-hover);
 }
 
@@ -270,7 +436,7 @@ body {
   border: 1px solid var(--border);
 }
 
-.btn-edit:hover {
+.btn-edit:hover:not(:disabled) {
   background-color: var(--border);
 }
 
@@ -282,12 +448,12 @@ body {
   border: 1px solid var(--error);
 }
 
-.btn-delete:hover {
+.btn-delete:hover:not(:disabled) {
   background-color: var(--error);
   color: white;
 }
 
-/* Todo List */
+/* Todo List with staggered animations */
 .todo-list {
   display: flex;
   flex-direction: column;
@@ -295,14 +461,15 @@ body {
   margin-bottom: 2rem;
 }
 
-/* Todo Item */
+/* Todo Item with entrance/exit animations */
 .todo-item {
   background: var(--surface);
   padding: 1.25rem;
   border-radius: 16px;
   box-shadow: 0 2px 8px var(--shadow);
-  transition: all 0.3s ease;
+  transition: all 0.15s ease-out;
   border: 2px solid transparent;
+  animation: fadeInSlideUp 0.3s ease-out;
 }
 
 .todo-item:hover {
@@ -319,11 +486,22 @@ body {
 .todo-item.completed .todo-title {
   text-decoration: line-through;
   color: var(--text-secondary);
+  animation: strikeThrough 0.3s ease-out;
+}
+
+.todo-item.completing {
+  animation: pulse 0.3s ease-out;
+}
+
+.todo-item.removing {
+  animation: fadeOutSlideDown 0.25s ease-in forwards;
+  pointer-events: none;
 }
 
 .todo-item.editing {
   border-color: var(--primary);
   box-shadow: 0 0 0 3px var(--primary-light);
+  animation: fadeInSlideUp 0.2s ease-out;
 }
 
 .todo-content {
@@ -339,6 +517,20 @@ body {
   flex-shrink: 0;
   margin-top: 0.25rem;
   accent-color: var(--success);
+  transition: transform 0.15s ease-out;
+}
+
+.todo-checkbox:hover {
+  transform: scale(1.1);
+}
+
+.todo-checkbox:active {
+  transform: scale(0.95);
+}
+
+.todo-checkbox:focus {
+  outline: 3px solid var(--primary-light);
+  outline-offset: 2px;
 }
 
 .todo-text {
@@ -350,6 +542,7 @@ body {
   font-weight: 600;
   color: var(--text);
   margin-bottom: 0.5rem;
+  transition: color 0.2s ease-out;
 }
 
 .todo-description {
@@ -374,7 +567,8 @@ body {
   margin-bottom: 0.75rem;
   background: var(--background);
   color: var(--text);
-  transition: all 0.2s ease;
+  transition: all 0.15s ease-out;
+  animation: fadeInSlideUp 0.2s ease-out;
 }
 
 .edit-input:focus {
@@ -393,7 +587,8 @@ body {
   margin-bottom: 0.75rem;
   background: var(--background);
   color: var(--text);
-  transition: all 0.2s ease;
+  transition: all 0.15s ease-out;
+  animation: fadeInSlideUp 0.2s ease-out;
 }
 
 .edit-textarea:focus {
@@ -406,9 +601,10 @@ body {
   display: flex;
   gap: 0.5rem;
   justify-content: flex-end;
+  animation: fadeInSlideUp 0.2s ease-out;
 }
 
-/* Error Message */
+/* Error Message with animation */
 .error-message {
   background-color: var(--error-light);
   color: var(--error);
@@ -420,6 +616,7 @@ body {
   align-items: center;
   border-left: 4px solid var(--error);
   box-shadow: 0 2px 8px var(--shadow);
+  animation: fadeInSlideUp 0.3s ease-out;
 }
 
 .btn-close {
@@ -434,29 +631,51 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.2s ease;
+  transition: all 0.15s ease-out;
   border-radius: 4px;
 }
 
 .btn-close:hover {
   background: var(--error);
   color: white;
+  transform: scale(1.1);
+}
+
+.btn-close:active {
+  transform: scale(0.95);
 }
 
 /* Loading and Empty States */
-.loading,
-.empty-state {
+.loading {
   text-align: center;
   padding: 3rem 1rem;
   color: var(--text-secondary);
   font-size: 1.1rem;
 }
 
+.loading::after {
+  content: '';
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--border);
+  border-top-color: var(--primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+}
+
 .empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
   background: var(--surface);
   border-radius: 16px;
   border: 2px dashed var(--border);
   box-shadow: 0 2px 8px var(--shadow);
+  animation: fadeInSlideUp 0.3s ease-out;
 }
 
 /* Stats */
@@ -472,17 +691,19 @@ body {
   background: var(--surface);
   border-radius: 12px;
   box-shadow: 0 2px 8px var(--shadow);
+  animation: fadeInSlideUp 0.3s ease-out;
 }
 
 .todo-stats span {
   font-weight: 500;
 }
 
-/* Toast Notifications Custom Styling */
+/* Toast Notifications with custom animations */
 .Toastify__toast {
   border-radius: 12px;
   box-shadow: 0 4px 12px var(--shadow-lg);
   font-family: inherit;
+  animation: slideUpFade 0.3s ease-out;
 }
 
 .Toastify__toast--success {
@@ -500,10 +721,15 @@ body {
 
 .Toastify__close-button {
   opacity: 0.7;
+  transition: opacity 0.15s ease-out;
 }
 
 .Toastify__close-button:hover {
   opacity: 1;
+}
+
+.Toastify__toast--default {
+  animation: slideUpFade 0.25s ease-out;
 }
 
 /* Responsive Design */
@@ -550,17 +776,11 @@ body {
   }
 }
 
-/* Smooth transitions for theme changes */
-* {
-  transition-property: background-color, border-color, color;
-  transition-duration: 0.3s;
-  transition-timing-function: ease;
+/* Smooth transitions for theme changes with cross-fade */
+:root {
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-/* Keep specific transitions for transforms and shadows */
-.btn,
-.todo-item,
-.todo-input-form,
-.theme-toggle {
-  transition: all 0.3s ease;
+body {
+  transition: background-color 0.3s ease;
 }

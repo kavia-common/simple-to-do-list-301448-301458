@@ -16,6 +16,7 @@ function App() {
   const [todos, setTodos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [actionLoading, setActionLoading] = useState(null); // Track which action is loading
 
   // Load todos on component mount
   useEffect(() => {
@@ -57,6 +58,7 @@ function App() {
   const handleAddTodo = async (todo) => {
     try {
       setError(null);
+      setActionLoading('add');
       const newTodo = await createTodo(todo);
       setTodos([...todos, newTodo]);
       toast.success('✅ Todo added successfully!', {
@@ -79,6 +81,9 @@ function App() {
         draggable: true
       });
       console.error('Error adding todo:', err);
+      throw err; // Re-throw to allow TodoInput to handle error animation
+    } finally {
+      setActionLoading(null);
     }
   };
 
@@ -91,6 +96,7 @@ function App() {
   const handleUpdateTodo = async (id, updates) => {
     try {
       setError(null);
+      setActionLoading(`update-${id}`);
       const updatedTodo = await updateTodo(id, updates);
       setTodos(todos.map(todo => todo.id === id ? updatedTodo : todo));
       toast.success('📝 Todo updated successfully!', {
@@ -113,6 +119,8 @@ function App() {
         draggable: true
       });
       console.error('Error updating todo:', err);
+    } finally {
+      setActionLoading(null);
     }
   };
 
@@ -124,6 +132,16 @@ function App() {
   const handleDeleteTodo = async (id) => {
     try {
       setError(null);
+      setActionLoading(`delete-${id}`);
+      
+      // Add removing class for exit animation
+      const todoElement = document.querySelector(`[data-todo-id="${id}"]`);
+      if (todoElement) {
+        todoElement.classList.add('removing');
+        // Wait for animation to complete before removing from state
+        await new Promise(resolve => setTimeout(resolve, 250));
+      }
+      
       await deleteTodo(id);
       setTodos(todos.filter(todo => todo.id !== id));
       toast.success('🗑️ Todo deleted successfully!', {
@@ -146,6 +164,8 @@ function App() {
         draggable: true
       });
       console.error('Error deleting todo:', err);
+    } finally {
+      setActionLoading(null);
     }
   };
 
@@ -158,6 +178,13 @@ function App() {
   const handleToggleComplete = async (id, completed) => {
     try {
       setError(null);
+      setActionLoading(`toggle-${id}`);
+      
+      // Optimistically update UI
+      setTodos(todos.map(todo => 
+        todo.id === id ? { ...todo, completed } : todo
+      ));
+      
       const updatedTodo = await toggleTodoComplete(id, completed);
       setTodos(todos.map(todo => todo.id === id ? updatedTodo : todo));
       toast.success(completed ? '✔️ Todo marked as complete!' : '↩️ Todo marked as incomplete!', {
@@ -169,6 +196,11 @@ function App() {
         draggable: true
       });
     } catch (err) {
+      // Revert optimistic update on error
+      setTodos(todos.map(todo => 
+        todo.id === id ? { ...todo, completed: !completed } : todo
+      ));
+      
       const errorMsg = 'Failed to toggle todo: ' + err.message;
       setError(errorMsg);
       toast.error(errorMsg, {
@@ -180,6 +212,8 @@ function App() {
         draggable: true
       });
       console.error('Error toggling todo:', err);
+    } finally {
+      setActionLoading(null);
     }
   };
 
@@ -193,7 +227,10 @@ function App() {
 
       <main className="app-main">
         <div className="container">
-          <TodoInput onAdd={handleAddTodo} />
+          <TodoInput 
+            onAdd={handleAddTodo} 
+            isLoading={actionLoading === 'add'}
+          />
 
           {error && (
             <div className="error-message">
@@ -217,6 +254,9 @@ function App() {
                   onUpdate={handleUpdateTodo}
                   onDelete={handleDeleteTodo}
                   onToggleComplete={handleToggleComplete}
+                  isUpdating={actionLoading === `update-${todo.id}`}
+                  isDeleting={actionLoading === `delete-${todo.id}`}
+                  isToggling={actionLoading === `toggle-${todo.id}`}
                 />
               ))}
             </div>
