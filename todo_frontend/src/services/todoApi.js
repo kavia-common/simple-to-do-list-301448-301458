@@ -1,5 +1,10 @@
 // API service for communicating with the backend todo API
 // Backend runs on port 3001
+// 
+// Configuration:
+// - Uses REACT_APP_API_URL environment variable
+// - Falls back to http://localhost:3001 if not set
+// - Backend CORS is configured to allow http://localhost:3000
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:3001';
 
