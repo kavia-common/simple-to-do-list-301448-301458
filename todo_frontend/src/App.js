@@ -1,13 +1,16 @@
 import React, { useState, useEffect } from 'react';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css';
 import TodoInput from './components/TodoInput';
 import TodoItem from './components/TodoItem';
+import ThemeToggle from './components/ThemeToggle';
 import { getTodos, createTodo, updateTodo, deleteTodo, toggleTodoComplete } from './services/todoApi';
 
 // PUBLIC_INTERFACE
 /**
  * Main App component for the Todo application
- * Manages state and coordinates between components and API
+ * Manages state and coordinates between components and API with toast notifications
  */
 function App() {
   const [todos, setTodos] = useState([]);
@@ -30,7 +33,16 @@ function App() {
       const data = await getTodos();
       setTodos(data);
     } catch (err) {
-      setError('Failed to load todos: ' + err.message);
+      const errorMsg = 'Failed to load todos: ' + err.message;
+      setError(errorMsg);
+      toast.error(errorMsg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
       console.error('Error loading todos:', err);
     } finally {
       setLoading(false);
@@ -47,8 +59,25 @@ function App() {
       setError(null);
       const newTodo = await createTodo(todo);
       setTodos([...todos, newTodo]);
+      toast.success('✅ Todo added successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
     } catch (err) {
-      setError('Failed to add todo: ' + err.message);
+      const errorMsg = 'Failed to add todo: ' + err.message;
+      setError(errorMsg);
+      toast.error(errorMsg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
       console.error('Error adding todo:', err);
     }
   };
@@ -64,8 +93,25 @@ function App() {
       setError(null);
       const updatedTodo = await updateTodo(id, updates);
       setTodos(todos.map(todo => todo.id === id ? updatedTodo : todo));
+      toast.success('📝 Todo updated successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
     } catch (err) {
-      setError('Failed to update todo: ' + err.message);
+      const errorMsg = 'Failed to update todo: ' + err.message;
+      setError(errorMsg);
+      toast.error(errorMsg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
       console.error('Error updating todo:', err);
     }
   };
@@ -80,8 +126,25 @@ function App() {
       setError(null);
       await deleteTodo(id);
       setTodos(todos.filter(todo => todo.id !== id));
+      toast.success('🗑️ Todo deleted successfully!', {
+        position: "top-right",
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
     } catch (err) {
-      setError('Failed to delete todo: ' + err.message);
+      const errorMsg = 'Failed to delete todo: ' + err.message;
+      setError(errorMsg);
+      toast.error(errorMsg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
       console.error('Error deleting todo:', err);
     }
   };
@@ -97,8 +160,25 @@ function App() {
       setError(null);
       const updatedTodo = await toggleTodoComplete(id, completed);
       setTodos(todos.map(todo => todo.id === id ? updatedTodo : todo));
+      toast.success(completed ? '✔️ Todo marked as complete!' : '↩️ Todo marked as incomplete!', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
     } catch (err) {
-      setError('Failed to toggle todo: ' + err.message);
+      const errorMsg = 'Failed to toggle todo: ' + err.message;
+      setError(errorMsg);
+      toast.error(errorMsg, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true
+      });
       console.error('Error toggling todo:', err);
     }
   };
@@ -106,6 +186,7 @@ function App() {
   return (
     <div className="App">
       <header className="app-header">
+        <ThemeToggle />
         <h1 className="app-title">📝 My Todo List</h1>
         <p className="app-subtitle">Stay organized and get things done</p>
       </header>
@@ -150,6 +231,19 @@ function App() {
           </div>
         </div>
       </main>
+
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
     </div>
   );
 }

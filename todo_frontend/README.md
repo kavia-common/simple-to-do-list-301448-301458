@@ -1,14 +1,32 @@
 # Todo Frontend - React Application
 
-This is a React-based frontend for the Todo application. It provides a clean, modern UI for managing todo items with add, edit, delete, and complete functionality.
+This is a React-based frontend for the Todo application. It provides a clean, modern UI for managing todo items with add, edit, delete, and complete functionality. The application features a stylish design with light/dark theme support and toast notifications for user feedback.
 
 ## Features
 
-- **Lightweight**: No heavy UI frameworks - uses only vanilla CSS and React
-- **Modern UI**: Clean, responsive design with blue and cyan accent colors
+- **Modern UI**: Clean, responsive design with blue (#3b82f6) and cyan (#06b6d4) accent colors
+- **Light/Dark Theme**: Toggle between light and dark modes with theme preference persistence
+- **Toast Notifications**: Visual feedback for all actions (add, edit, delete, complete)
 - **Fast**: Minimal dependencies for quick loading times
 - **Simple**: Easy to understand and modify
 - **Full CRUD**: Create, read, update, delete, and mark todos as complete
+- **Accessible**: Keyboard navigation and screen reader support
+
+## New Features
+
+### Theme Toggle
+- Click the sun/moon icon in the top-right corner of the header to switch between light and dark themes
+- Theme preference is automatically saved in localStorage and persists across sessions
+- Smooth transitions between themes for a pleasant user experience
+
+### Toast Notifications
+- **Add Todo**: Green success toast with ✅ icon
+- **Edit Todo**: Green success toast with 📝 icon
+- **Delete Todo**: Green success toast with 🗑️ icon
+- **Complete Todo**: Green success toast with ✔️ or ↩️ icon
+- **Errors**: Red error toast with detailed error message
+- Toasts auto-dismiss after 2-5 seconds and can be manually dismissed
+- All toasts appear in the top-right corner
 
 ## Backend Integration
 
@@ -69,17 +87,18 @@ See `.env.example` for configuration template.
 Launches the test runner in interactive watch mode.
 
 #### `npm run build`
-Builds the app for production to the `build` folder.\
+Builds the app for production to the `build` folder.  
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
 ## Customization
 
 ### Colors
 
-The main brand colors are defined as CSS variables in `src/App.css`:
+The main brand colors are defined as CSS custom properties in `src/App.css`:
 
+**Light Theme:**
 ```css
-:root {
+:root[data-theme='light'] {
   --primary: #3b82f6;
   --secondary: #64748b;
   --success: #06b6d4;
@@ -90,18 +109,45 @@ The main brand colors are defined as CSS variables in `src/App.css`:
 }
 ```
 
+**Dark Theme:**
+```css
+:root[data-theme='dark'] {
+  --primary: #3b82f6;
+  --secondary: #94a3b8;
+  --success: #06b6d4;
+  --error: #EF4444;
+  --background: #0f172a;
+  --surface: #1e293b;
+  --text: #f1f5f9;
+}
+```
+
 ### Components
 
-This template uses pure HTML/CSS components instead of a UI framework. You can find component styles in `src/App.css`. 
+This template uses pure HTML/CSS components with React. Component styles are in `src/App.css`.
 
 Common components include:
-- Buttons (`.btn`, `.btn-large`)
+- Buttons (`.btn`, `.btn-add`, `.btn-edit`, `.btn-delete`)
 - Container (`.container`)
-- Typography (`.title`, `.subtitle`, `.description`)
+- Typography (`.app-title`, `.app-subtitle`, `.todo-title`)
+- Theme Toggle (`.theme-toggle`)
 
-## API Configuration
+## Technical Details
 
-### Backend Connection
+### Theme Management
+- Theme state is managed via React Context (`ThemeContext`)
+- Theme preference is stored in `localStorage` with key `'theme'`
+- Theme is applied to the document root via `data-theme` attribute
+- All components respond to theme changes via CSS custom properties
+
+### Toast Notifications
+- Powered by `react-toastify` library
+- Positioned at top-right of screen
+- Auto-dismiss with configurable timing
+- Color-coded: green for success, red for errors
+- Draggable and pausable on hover
+
+### API Configuration
 
 The frontend connects to the backend API using the URL specified in the `REACT_APP_API_URL` environment variable. This variable MUST be set before starting the application.
 
@@ -139,6 +185,18 @@ If you see network errors or "Failed to fetch" messages:
 4. **Check CORS**: Verify the backend allows requests from your frontend origin
 5. **Check the browser console**: Look for CORS errors or network issues in the DevTools console
 
+### Theme not persisting
+
+- Ensure localStorage is enabled in your browser
+- Check browser console for any localStorage-related errors
+- Clear browser cache and try again
+
+### Toasts not appearing
+
+- Check that `react-toastify` CSS is imported in `App.js`
+- Verify `ToastContainer` component is rendered in the App
+- Check browser console for any errors
+
 ### Environment variable not working
 
 - React environment variables MUST start with `REACT_APP_`
@@ -152,30 +210,15 @@ If you see network errors or "Failed to fetch" messages:
 3. **Start the frontend**: Run `npm start` (runs on port 3000)
 4. **Open the app**: Navigate to [http://localhost:3000](http://localhost:3000) in your browser
 
+## Dependencies
+
+- **react**: ^18.2.0 - Core React library
+- **react-dom**: ^18.2.0 - React DOM rendering
+- **react-scripts**: ^5.0.1 - Create React App build scripts
+- **react-toastify**: ^10.0.0 - Toast notification library
+
 ## Learn More
 
 To learn React, check out the [React documentation](https://reactjs.org/).
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+For toast notifications, see [React-Toastify documentation](https://fkhadra.github.io/react-toastify/introduction).
