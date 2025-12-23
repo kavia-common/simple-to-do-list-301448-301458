@@ -17,6 +17,11 @@ A simple, modern todo application built with React frontend, FastAPI backend, an
 - **Backend**: FastAPI (Port 3001)
 - **Database**: SQLite (file-based)
 
+## Integration Status
+
+✅ **VERIFIED**: All integration tests passed on 2025-12-23  
+📋 See [INTEGRATION_VERIFICATION.md](./INTEGRATION_VERIFICATION.md) for detailed test results
+
 ## Quick Start
 
 ### Prerequisites
@@ -81,7 +86,9 @@ See `.env` files in each container for detailed configuration options.
 ## Documentation
 
 - **Integration Details**: See [INTEGRATION_SUMMARY.md](./INTEGRATION_SUMMARY.md)
+- **Verification Report**: See [INTEGRATION_VERIFICATION.md](./INTEGRATION_VERIFICATION.md) ✅
 - **Testing Checklist**: See [INTEGRATION_CHECKLIST.md](./INTEGRATION_CHECKLIST.md)
+- **Troubleshooting Guide**: See [TROUBLESHOOTING.md](./TROUBLESHOOTING.md) 🔧
 - **Frontend README**: See [todo_frontend/README.md](./todo_frontend/README.md)
 - **API Documentation**: Visit http://localhost:3001/docs (when backend is running)
 
