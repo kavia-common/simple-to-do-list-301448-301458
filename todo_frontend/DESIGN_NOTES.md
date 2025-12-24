@@ -56,13 +56,17 @@ Usage rules
 - System font stack for performance and legibility: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif.
 - Base size: --font-base: 16px
 - Scale:
-  - --font-small: 14px (meta text, small controls)
+  - --font-small: 13px (meta text, small controls)
   - --font-body: 16px (default)
+  - --font-h3: 18px (mobile todo title)
   - --font-h2: 20px (todo title)
-  - --font-h1: 24px (app title)
-- Line heights:
+  - --font-h1: 26px (app title)
+- Line heights and tracking:
   - --line-compact: 1.25 (titles)
-  - --line-normal: 1.5 (body)
+  - --line-normal: 1.55 (body)
+  - --letter-tight: -0.005em
+  - --letter-normal: 0
+  - --letter-wide: 0.01em
 - Weight: 600 for action buttons and item titles; 700 for the app title.
 
 ## Spacing Rhythm and Layout Rules
@@ -81,6 +85,8 @@ Usage rules
   - Content max-width: 760px centered with grid gaps at --space-5.
   - Card padding: --space-4 to --space-5 range for clarity without bulk.
   - Header is sticky, with bottom divider using --divider.
+- Responsive adjustments:
+  - On <=768px, app title uses 24px; todo title uses --font-h3; card padding reduced slightly for tighter fit.
 
 ## Component Guidelines
 ### App Header

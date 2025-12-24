@@ -17,16 +17,21 @@
 
   /* typography */
   --font-base: 16px;
-  --font-small: 14px;
+  --font-small: 13px; /* slightly tighter small text for meta and small controls */
   --font-body: 16px;
+  --font-h3: 18px;
   --font-h2: 20px;
-  --font-h1: 24px;
+  --font-h1: 26px; /* slightly larger for clearer hierarchy */
   --line-compact: 1.25;
-  --line-normal: 1.5;
+  --line-normal: 1.55; /* improved readability */
+  --letter-tight: -0.005em;
+  --letter-normal: 0;
+  --letter-wide: 0.01em;
 
   /* timing */
   --t-fast: 120ms;
   --t-normal: 180ms;
+  --t-slow: 240ms;
 }
 
 /* Light theme */
@@ -94,6 +99,8 @@ body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
     Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   font-size: var(--font-base);
+  line-height: var(--line-normal);
+  letter-spacing: var(--letter-normal);
   background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
@@ -115,7 +122,7 @@ body {
   z-index: 10;
   background: var(--bg);
   border-bottom: 1px solid var(--divider);
-  padding: var(--space-5) var(--space-4);
+  padding: calc(var(--space-5) - 2px) var(--space-4);
 }
 
 .header-inner {
@@ -131,6 +138,7 @@ body {
   font-size: var(--font-h1);
   font-weight: 700;
   line-height: var(--line-compact);
+  letter-spacing: var(--letter-tight);
   margin: 0;
 }
 
@@ -199,6 +207,7 @@ body {
   padding: calc(var(--space-3) - 2px) var(--space-4);
   font-size: var(--font-body);
   line-height: var(--line-normal);
+  letter-spacing: var(--letter-normal);
   transition: border-color var(--t-fast) ease, background-color var(--t-fast) ease, box-shadow var(--t-fast) ease;
 }
 .todo-input:focus,
@@ -220,8 +229,20 @@ body {
 }
 
 /* Text size */
-.todo-title { font-size: var(--font-h2); line-height: var(--line-compact); font-weight: 600; margin: 0 0 var(--space-2); }
-.todo-description { font-size: var(--font-body); color: var(--text-muted); line-height: var(--line-normal); }
+.todo-title { 
+  font-size: var(--font-h2); 
+  line-height: var(--line-compact); 
+  letter-spacing: var(--letter-tight);
+  font-weight: 600; 
+  margin: 0 0 var(--space-2); 
+}
+.todo-description { 
+  font-size: var(--font-body); 
+  color: var(--text-muted); 
+  line-height: var(--line-normal); 
+  letter-spacing: var(--letter-normal);
+  margin: 0;
+}
 
 /* Buttons - minimal */
 .btn {
@@ -232,6 +253,8 @@ body {
   border-radius: var(--radius-1);
   padding: var(--space-3) var(--space-4);
   font-size: var(--font-body);
+  line-height: var(--line-compact);
+  letter-spacing: var(--letter-tight);
   font-weight: 600;
   cursor: pointer;
   transition: background-color var(--t-fast) ease, border-color var(--t-fast) ease, color var(--t-fast) ease, opacity var(--t-fast) ease;
@@ -249,8 +272,8 @@ body {
 .btn-cancel,
 .btn-hide-desc { color: var(--text); }
 
-.btn-edit { font-size: var(--font-small); padding: var(--space-2) var(--space-3); }
-.btn-delete { font-size: var(--font-small); padding: var(--space-2) var(--space-3); color: var(--error); border-color: var(--error); }
+.btn-edit { font-size: var(--font-small); padding: var(--space-2) var(--space-3); line-height: var(--line-compact); }
+.btn-delete { font-size: var(--font-small); padding: var(--space-2) var(--space-3); color: var(--error); border-color: var(--error); line-height: var(--line-compact); }
 .btn-delete:hover:not(:disabled) { background: var(--error); color: #fff; }
 
 /* Spinner */
@@ -276,7 +299,7 @@ body {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-2);
-  padding: var(--space-4);
+  padding: calc(var(--space-4) + 2px);
   transition: background-color var(--t-fast) ease, border-color var(--t-fast) ease;
 }
 .todo-item:hover { border-color: var(--primary); }
@@ -328,6 +351,16 @@ body {
   border-radius: var(--radius-1);
   cursor: pointer;
 }
+.btn-show-desc {
+  appearance: none;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: var(--font-small);
+  padding: var(--space-2) 0 0;
+  cursor: pointer;
+}
+.btn-show-desc:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--primary-ring); border-radius: var(--radius-1); }
 .btn-close:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--primary-ring); }
 
 .loading,
@@ -339,7 +372,11 @@ body {
   padding: var(--space-5);
   text-align: center;
   color: var(--text-muted);
+  font-size: var(--font-small);
+  line-height: var(--line-normal);
+  letter-spacing: var(--letter-wide);
 }
+.todo-stats span { margin: 0 var(--space-1); }
 
 /* Toastify minimal adjustments */
 .Toastify__toast {
@@ -354,4 +391,7 @@ body {
 @media (max-width: 768px) {
   .app-main { padding: var(--space-5) var(--space-3); }
   .header-inner { padding: 0 var(--space-1); }
+  .app-title { font-size: 24px; }
+  .todo-item { padding: var(--space-4); }
+  .todo-title { font-size: var(--font-h3); }
 }
