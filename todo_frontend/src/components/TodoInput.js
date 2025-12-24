@@ -49,7 +49,7 @@ function TodoInput({ onAdd, isLoading = false }) {
           className={`todo-input ${hasError && !title.trim() ? 'error' : ''}`}
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Add a new task..."
+          placeholder="Add a task"
           maxLength={500}
           disabled={isLoading}
         />

@@ -220,9 +220,10 @@ function App() {
   return (
     <div className="App">
       <header className="app-header">
-        <ThemeToggle />
-        <h1 className="app-title">📝 My Todo List</h1>
-        <p className="app-subtitle">Stay organized and get things done</p>
+        <div className="header-inner">
+          <h1 className="app-title">My Todos</h1>
+          <ThemeToggle />
+        </div>
       </header>
 
       <main className="app-main">

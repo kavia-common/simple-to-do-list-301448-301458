@@ -129,14 +129,16 @@ function TodoItem({
           onClick={() => setIsEditing(true)}
           disabled={isUpdating || isDeleting || isToggling}
           aria-label={`Edit "${todo.title}"`}
+          title="Edit"
         >
-          ✏️ Edit
+          ✏️
         </button>
         <button
           className={`btn btn-delete ${isDeleting ? 'loading' : ''}`}
           onClick={() => onDelete(todo.id)}
           disabled={isUpdating || isDeleting || isToggling}
           aria-label={`Delete "${todo.title}"`}
+          title="Delete"
         >
           {isDeleting ? (
             <>
@@ -144,7 +146,7 @@ function TodoItem({
               Deleting...
             </>
           ) : (
-            <>🗑️ Delete</>
+            <>🗑️</>
           )}
         </button>
       </div>
