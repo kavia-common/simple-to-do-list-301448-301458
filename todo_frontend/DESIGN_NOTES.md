@@ -126,6 +126,48 @@ Note: While previous iterations included richer micro-interactions, the current 
 ## Accessibility Considerations
 - Focus states: All focusable elements (.btn, inputs, ThemeToggle, checkbox) use box-shadow 0 0 0 3px with --primary-ring for visibility.
 - Contrast: Text and surfaces are chosen for contrast in light and dark themes; avoid non-token colors.
+
+### Contrast targets (2025-12 update)
+- Body text against background: WCAG AA (≥ 4.5:1).
+- Text on buttons and form controls: WCAG AA (≥ 4.5:1) for normal text.
+- Icon-only controls and focus outlines: clearly perceivable against both themes.
+
+### Token adjustments summary
+Light
+- --primary: #2563eb (was #3b82f6)
+- --primary-hover: #1d4ed8 (was #2563eb)
+- --primary-ring: #bfdbfe (was #dbeafe)
+- --success: #0ea5e9 (was #06b6d4)
+- --success-hover: #0284c7 (was #0891b2)
+- --text: #0b1220 (was #111827)
+- --text-muted: #4b5563 (was #6b7280)
+- --bg: #f8fafc (was #f9fafb)
+- --surface-muted: #f1f5f9 (was #f3f4f6)
+- --border: #d1d5db (was #e5e7eb)
+- --divider: #e2e8f0 (was #e5e7eb)
+
+Dark
+- --primary: #60a5fa (was #3b82f6)
+- --primary-hover: #93c5fd (was #60a5fa)
+- --primary-ring: rgba(96,165,250,0.45) (was rgba(59,130,246,.25))
+- --success: #22d3ee (was #06b6d4)
+- --success-hover: #67e8f9 (was #22d3ee)
+- --error-weak: #4c1d1d (was #3b0a0a)
+- --text: #e5e7eb (was #f1f5f9)
+- --text-muted: #cbd5e1 (was #94a3b8)
+- --bg: #0b1020 (was #0f172a)
+- --surface: #111827 (was #1e293b)
+- --surface-muted: #1f2937 (was #334155)
+- --border: #374151 (was #334155)
+- --divider: #2d3a4c (was #2b3a51)
+
+### Rationale
+- Deepened primary/success hues to ensure white text on colored buttons passes AA.
+- Strengthened borders and dividers for clearer component boundaries on both themes.
+- Elevated muted/disabled readability in dark theme to avoid too-low contrast.
+- Increased focus-ring visibility on dark by using higher alpha.
+- Toasts enforce light foreground for clarity and add subtle borders for separation on both themes.
+
 - Labels and aria:
   - ThemeToggle uses aria-label and title describing the target theme.
   - TodoItem checkbox uses aria-label that describes the action in context: Mark "<title>" as complete/incomplete.

@@ -36,48 +36,59 @@
 
 /* Light theme */
 :root[data-theme='light'] {
-  --primary: #3b82f6;
-  --primary-hover: #2563eb;
-  --primary-ring: #dbeafe;
+  /* Primary/action colors tuned for better AA contrast on states */
+  --primary: #2563eb;          /* slightly deeper than #3b82f6 for stronger contrast on white */
+  --primary-hover: #1d4ed8;    /* darker hover for clear state change */
+  --primary-ring: #bfdbfe;     /* lighter ring for visibility on light bg (AA-friendly outline) */
 
-  --success: #06b6d4;
-  --success-hover: #0891b2;
+  /* Success/info with accessible contrast on white */
+  --success: #0ea5e9;          /* deeper than #06b6d4 for text legibility when used as bg */
+  --success-hover: #0284c7;    /* darker hover */
 
   --error: #ef4444;
   --error-weak: #fee2e2;
 
-  --text: #111827;
-  --text-muted: #6b7280;
+  /* Text tokens meet AA against bg/surfaces */
+  --text: #0b1220;             /* slightly deeper than #111827 for improved contrast */
+  --text-muted: #4b5563;       /* increase contrast vs #6b7280 */
 
-  --bg: #f9fafb;
+  /* Surfaces and containers */
+  --bg: #f8fafc;               /* subtle shift for slightly higher contrast to borders */
   --surface: #ffffff;
-  --surface-muted: #f3f4f6;
+  --surface-muted: #f1f5f9;    /* a hair darker than before for better diff from surface */
 
-  --border: #e5e7eb;
-  --divider: #e5e7eb;
+  /* Borders/dividers strengthened for visibility on light bg */
+  --border: #d1d5db;           /* darker than #e5e7eb for inputs/cards */
+  --divider: #e2e8f0;          /* keep subtle but more visible than previous */
 }
 
 /* Dark theme */
 :root[data-theme='dark'] {
-  --primary: #3b82f6;
-  --primary-hover: #60a5fa;
-  --primary-ring: rgba(59,130,246,.25);
+  /* Primary on dark: maintain saturation but ensure hover contrast and ring visibility */
+  --primary: #60a5fa;            /* lighter base for visibility against dark surfaces */
+  --primary-hover: #93c5fd;      /* brighter hover for clear state on dark */
+  --primary-ring: rgba(96,165,250,0.45); /* stronger alpha for dark backgrounds */
 
-  --success: #06b6d4;
-  --success-hover: #22d3ee;
+  /* Success on dark: bump luminance for readability */
+  --success: #22d3ee;            /* brighter cyan improves contrast on dark */
+  --success-hover: #67e8f9;
 
+  /* Error and weak error surface */
   --error: #f87171;
-  --error-weak: #3b0a0a;
+  --error-weak: #4c1d1d;         /* higher contrast than #3b0a0a to separate from bg */
 
-  --text: #f1f5f9;
-  --text-muted: #94a3b8;
+  /* Text tokens: ensure AA on bg and surface */
+  --text: #e5e7eb;               /* slight step down from #f1f5f9 to reduce glare while AA */
+  --text-muted: #cbd5e1;         /* brighter muted for dark theme readability */
 
-  --bg: #0f172a;
-  --surface: #1e293b;
-  --surface-muted: #334155;
+  /* Backgrounds and surfaces for better separation */
+  --bg: #0b1020;                 /* a touch deeper than #0f172a to improve contrast separation */
+  --surface: #111827;            /* deeper for stronger contrast to cards and inputs */
+  --surface-muted: #1f2937;      /* sits between surface and border */
 
-  --border: #334155;
-  --divider: #2b3a51;
+  /* Borders/dividers more visible on dark */
+  --border: #374151;
+  --divider: #2d3a4c;
 }
 
 /* Reduced motion */
@@ -242,6 +253,7 @@ body {
   line-height: var(--line-normal); 
   letter-spacing: var(--letter-normal);
   margin: 0;
+  /* ensure muted text remains readable on dark theme */
 }
 
 /* Buttons - minimal */
@@ -261,13 +273,20 @@ body {
 }
 .btn:hover:not(:disabled) { background: var(--surface-muted); }
 .btn:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--primary-ring); }
-.btn:disabled { opacity: .6; cursor: not-allowed; }
+.btn:disabled { opacity: .55; cursor: not-allowed; }
+@media (prefers-color-scheme: dark) {
+  :root[data-theme='dark'] .btn:disabled {
+    opacity: .7; /* slightly higher to ensure text remains readable against darker surfaces */
+  }
+}
 
-.btn-add { background: var(--primary); color: #fff; border-color: var(--primary); }
+.btn-add { background: var(--primary); color: #ffffff; border-color: var(--primary); }
 .btn-add:hover:not(:disabled) { background: var(--primary-hover); border-color: var(--primary-hover); }
+.btn-add:active { filter: brightness(0.95); }
 
-.btn-save { background: var(--success); color: #fff; border-color: var(--success); }
+.btn-save { background: var(--success); color: #ffffff; border-color: var(--success); }
 .btn-save:hover:not(:disabled) { background: var(--success-hover); border-color: var(--success-hover); }
+.btn-save:active { filter: brightness(0.95); }
 
 .btn-cancel,
 .btn-hide-desc { color: var(--text); }
@@ -302,7 +321,7 @@ body {
   padding: calc(var(--space-4) + 2px);
   transition: background-color var(--t-fast) ease, border-color var(--t-fast) ease;
 }
-.todo-item:hover { border-color: var(--primary); }
+.todo-item:hover { border-color: var(--primary); box-shadow: 0 0 0 1px color-mix(in srgb, var(--primary) 40%, transparent); }
 .todo-item.completed { background: var(--surface-muted); }
 .todo-content {
   display: grid;
@@ -315,7 +334,7 @@ body {
   margin-top: 2px;
   accent-color: var(--success);
 }
-.todo-checkbox:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--primary-ring); border-radius: 4px; }
+.todo-checkbox:focus-visible { outline: none; box-shadow: 0 0 0 3px var(--primary-ring); border-radius: 4px; background: transparent; }
 
 .todo-actions {
   display: flex;
@@ -383,9 +402,10 @@ body {
   border-radius: var(--radius-2);
   font-family: inherit;
   padding: var(--space-2) var(--space-3);
+  color: #ffffff; /* guarantee readable foreground */
 }
-.Toastify__toast--success { background: var(--success); }
-.Toastify__toast--error { background: var(--error); }
+.Toastify__toast--success { background: var(--success); border: 1px solid rgba(255,255,255,0.08); }
+.Toastify__toast--error { background: var(--error); border: 1px solid rgba(0,0,0,0.08); }
 
 /* Responsive */
 @media (max-width: 768px) {
